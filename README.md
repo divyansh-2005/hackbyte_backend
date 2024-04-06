@@ -1,128 +1,50 @@
-# Notes API
+here's a summary of all the endpoints available in  backend, organized by their purpose:
 
-This project is a RESTful API built using Express.js, providing functionalities to manage user notes. It supports the following features:
+### User Authentication Endpoints
 
-- **SignUp**: Allows users to create an account by providing a username, email, and password.
-- **SignIn**: Enables users to sign in using their registered email and password.
-- **CreateNote**: Allows authenticated users to create new notes.
-- **UpdateNote**: Allows authenticated users to update existing notes.
-- **DeleteNote**: Allows authenticated users to delete their notes.
-- **GetNote**: Allows authenticated users to retrieve their notes.
+- *POST /users/signup*: Allows new users to sign up. Requires a username, email, and password in the request body.
+- *POST /users/signin*: Allows existing users to sign in. Requires an email and password in the request body.
 
-## Deployment
+### Victim Reporting Endpoints
 
-The deployment process for the Notes API is currently underway. Stay tuned for updates on the deployment status and instructions on how to access the API once it's deployed. If you have any questions or inquiries regarding deployment, feel free to reach out. Thank you for your patience!
+- *POST /victim/critical*: Allows the submission of critical victim reports. Requires details such as phone number, location, emergency type, and optionally a photo in the request body.
+- *POST /victim/non-critical*: Allows the submission of non-critical victim reports. Requires details such as name, contact, location, description, number of people impacted, critical medical status, urgency level, and optionally a photo in the request body.
 
-## Installation
+### Victim Fetching Endpoints
 
-1. Clone this repository to your local machine:
+- *GET /victim/critical*: Fetches a list of all critical victim reports.
+- *GET /victim/non-critical*: Fetches a list of all non-critical victim reports.
 
-   ```bash
-   git clone <repository-url>
-   ```
+### General Endpoints
 
-2. Navigate to the project directory:
+- *GET /*: A simple endpoint that returns "API" to indicate the server is running.
 
-   ```bash
-   cd notes-api
-   ```
+### Note on Authentication
 
-3. Install dependencies:
+For the endpoints that require authentication (e.g., submitting victim reports), you should include an Authorization header with a valid JWT token in the request. The token is obtained upon successful signup or signin. The auth middleware checks for this token and verifies it before allowing access to the protected endpoints.
 
-   ```bash
-   npm install
-   ```
+### Example Request for Submitting a Critical Victim Report
 
-4. Set up environment variables:
-   - Create a `.env` file in the root directory.
-   - Define the following environment variables:
-     - `MONGO_URL`: MongoDB connection URI.
-     - `SECRET_KEY`: Secret key for JWT token generation.
+http
+POST /victim/critical HTTP/1.1
+Host: your-backend-host.com
+Content-Type: application/json
+Authorization: Bearer your_jwt_token_here
 
-5. Start the server:
-
-   ```bash
-   npm start
-   ```
-
-## Usage
-
-### SignUp
-
-Endpoint: `POST /users/signup`
-
-Request Body:
-```json
 {
-  "username": "example",
-  "email": "example@example.com",
-  "password": "password"
+    "phone": "1234567890",
+    "location": "123 Main St",
+    "EmergencyType": "Fire",
+    "photo": "http://example.com/photo.jpg"
 }
-```
 
-### SignIn
 
-Endpoint: `POST /users/signin`
+### Example Request for Fetching Non-Critical Victim Reports
 
-Request Body:
-```json
-{
-  "email": "example@example.com",
-  "password": "password"
-}
-```
+http
+GET /victim/non-critical HTTP/1.1
+Host: your-backend-host.com
+Authorization: Bearer your_jwt_token_here
 
-### CreateNote
 
-Endpoint: `POST /note`
-
-Authorization: Bearer token
-
-Request Body:
-```json
-{
-  "title": "Note Title",
-  "content": "Note Content"
-}
-```
-
-### UpdateNote
-
-Endpoint: `PUT /note/:noteId`
-
-Authorization: Bearer token
-
-Request Body:
-```json
-{
-  "title": "Updated Note Title",
-  "content": "Updated Note Content"
-}
-```
-
-### DeleteNote
-
-Endpoint: `DELETE /note/:noteId`
-
-Authorization: Bearer token
-
-### GetNote
-
-Endpoint: `GET /note`
-
-Authorization: Bearer token
-
-## Authentication
-
-This API uses JSON Web Tokens (JWT) for authentication. Upon successful authentication (sign-in or sign-up), a token is generated and returned. This token should be included in the `Authorization` header of subsequent requests as a Bearer token.
-
-Example:
-
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAdGVzdC5jb20iLCJpZCI6IjYwNzlkZTI3N2U4NjFhMjE2MzZkM2IwZSIsImlhdCI6MTY0ODg0NzY5NCwiZXhwIjoxNjQ4ODUxMjk0fQ.k3i-BtGNgG3BpzfQZu_LDFDab3kffHuxbu1nftA7yQ0
-```
-
-## Contributing
-
-Contributions are welcome! Feel free to open an issue or submit a pull request for new features, improvements, or bug fixes.
-
+This summary provides an overview of the endpoints available in your backend. Ensure that your frontend correctly implements these endpoints, including handling authentication tokens and structuring request bodies as required.
