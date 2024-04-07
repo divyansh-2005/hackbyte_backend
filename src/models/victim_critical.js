@@ -1,10 +1,7 @@
 const mongoose = require("mongoose")
 
 const victim_criticalSchema = mongoose.Schema({
-    phone:{
-        type:Number,
-        required:true,
-    },
+    
     location:{
         type:String,
         required:true,
